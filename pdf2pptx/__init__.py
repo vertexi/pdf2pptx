@@ -53,7 +53,11 @@ def convert_pdf2pptx(
         # add a slide
         slide = prs.slides.add_slide(blank_slide_layout)    
         left = top = Cm(0)
-        slide.shapes.add_picture(image_file, left, top, height=prs.slide_height)
+        pic = slide.shapes.add_picture(image_file, left, top, height=prs.slide_height)
+
+        # This moves it to the background
+        slide.shapes._spTree.remove(pic._element)
+        slide.shapes._spTree.insert(2, pic._element)
 
     if output_file is None:
         output_file = Path(pdf_file).with_suffix('.pptx')
